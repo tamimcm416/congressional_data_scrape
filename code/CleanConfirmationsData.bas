@@ -5,26 +5,6 @@ Option Explicit
 ' Congressional Activity from PDF to CSV. This module is not intended to cover every possible issue, but to automate as
 ' much of the common cleanup as is reasonable.
 
-Private Sub Format()
-' This subroutine adjusts column widths and alignments, and adds rows Congress, Session, Start Date and End Date
-
-    Columns("A").ColumnWidth = 60
-    Columns("A").HorizontalAlignment = xlLeft
-    Columns("B").ColumnWidth = 15
-    Columns("B").HorizontalAlignment = xlRight
-    
-    ' Add rows for Congress, Session, Start Date and End Date
-    Rows("1:5").EntireRow.Insert Shift:=xlDown
-    
-    ' Rename columns
-    Cells(1, 1).Value = "Labels"
-    Cells(1, 2).Value = "Values"
-    Cells(2, 1).Value = "Congress"
-    Cells(3, 1).Value = "Session"
-    Cells(4, 1).Value = "Start Date"
-    Cells(5, 1).Value = "End Date"
-        
-End Sub
 
 Private Sub DeleteEmptyCells()
 ' This subroutine removes all empty cells to simplify merging of content
@@ -53,7 +33,7 @@ Private Sub sectionHeadings()
     Dim r As Range
     Dim lastCell As Range
     Dim c As Range
-    
+        
     ' Use the Summary label as an end row for our loop
     Set summaryCell = Columns("A").Find(What:="Summary")
     If Not summaryCell Is Nothing Then
@@ -98,9 +78,11 @@ Private Sub sectionHeadings()
                 r.Value = "     " & r.Value
             End If
             Next
+        
     End If
                 
 End Sub
+
 
 Private Sub TotalNominations()
 ' This subroutine extracts new and carryover nominations from section headings
@@ -162,18 +144,6 @@ Private Sub TotalNominations()
 End Sub
 
 
-Private Sub SetCongressAndSession()
-' This subroutine extracts the Congress and Session data from the file name
-
-    Dim fileName As String
-        
-    fileName = ActiveWorkbook.Name
-    ActiveSheet.Name = Left(fileName, Len(fileName) - 5)
-    Cells(2, 2).Value = Left(fileName, InStr(1, fileName, "_") - 1)
-    Cells(3, 2).Value = Left(Right(fileName, 6), 1)
-    
-End Sub
-
 Private Sub RemovePeriods()
 ' This subroutine removes periods from data labels, and extracts data values that have not been properly separated from
 ' their labels
@@ -196,6 +166,70 @@ Private Sub RemovePeriods()
 End Sub
 
 
+Private Sub Format()
+' This subroutine adjusts column widths and alignments, and adds rows Congress, Session, Start Date and End Date
+
+    Columns("A").ColumnWidth = 60
+    Columns("A").HorizontalAlignment = xlLeft
+    Columns("B").ColumnWidth = 15
+    Columns("B").HorizontalAlignment = xlRight
+    
+    ' Add rows for Congress, Session, Start Date and End Date
+    Rows("1:5").EntireRow.Insert Shift:=xlDown
+    
+    ' Rename columns
+    Cells(1, 1).Value = "Labels"
+    Cells(1, 2).Value = "Values"
+    Cells(2, 1).Value = "Congress"
+    Cells(3, 1).Value = "Session"
+    Cells(4, 1).Value = "Start Date"
+    Cells(5, 1).Value = "End Date"
+        
+End Sub
+
+
+Private Sub PrependHeading()
+' This subroutine prepends the heading label on each detail line. This will prevent duplication of labels during later
+' data processing and analysis
+
+    Dim summaryCell As Range
+    Dim rowRange As Range
+    Dim r As Range
+    Dim heading As String
+    
+    ' Use the Summary label as an end row for our loop
+    Set summaryCell = Columns("A").Find(What:="Summary")
+    If Not summaryCell Is Nothing Then
+        Set rowRange = Range(Cells(6, 1), summaryCell.Offset(-1, 0))
+        ' Loop through each cell in column A until the Summary label
+        For Each r In rowRange
+            If Mid(r.Value, 1, 5) = "     " Then
+                r.Value = "     " & heading & ", " & LTrim(r.Value)
+            Else
+                heading = RTrim(r.Value)
+            End If
+        Next r
+        
+        'The summary heading is no longer needed
+        summaryCell.EntireRow.Delete Shift:=xlUp
+    End If
+
+End Sub
+
+
+Private Sub SetCongressAndSession()
+' This subroutine extracts the Congress and Session data from the file name
+
+    Dim fileName As String
+        
+    fileName = ActiveWorkbook.Name
+    ActiveSheet.Name = Left(fileName, Len(fileName) - 5)
+    Cells(2, 2).Value = Left(fileName, InStr(1, fileName, "_") - 1)
+    Cells(3, 2).Value = Left(Right(fileName, 6), 1)
+    
+End Sub
+
+
 Private Sub PromptForDates()
 ' This subroutine prompts for Start and End dates for the session
 
@@ -212,6 +246,7 @@ Sub CleanConfirmations()
     Call TotalNominations
     Call RemovePeriods
     Call Format
+    Call PrependHeading
     Call SetCongressAndSession
     Call PromptForDates
 

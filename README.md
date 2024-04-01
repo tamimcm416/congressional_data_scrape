@@ -31,12 +31,12 @@ Data was scraped using tabula, formatted in Excel using VBA, and tidied in Jupyt
 
 ## File Descriptions
 
-| Name                                      | Description                                                                                |
-| :---------------------------------------- | :----------------------------------------------------------------------------------------- |
-| data                                      | Folder containing original data files and scrubbed output                                  |
-| code                                      | Folder containing Jupyter notebooks and VBA exports                                        |
-| documentation                             | Folder containing  Project plan, issues list, and PDF libary testing documetentation       | 
-| Data Scrape and Validation Presenatation  | Power Point recap of project and findings                                                  |
+| Name                                      | Description                                                                        |
+| :---------------------------------------- | :--------------------------------------------------------------------------------- |
+| data                                      | Folder containing original data files and scrubbed output                          |
+| code                                      | Folder containing Jupyter notebooks and VBA exports                                |
+| documentation                             | Folder containing general project documentation                                    | 
+| Data Scrape and Validation Presenatation  | Power Point recap of project and findings                                          |
 
 
 </br>

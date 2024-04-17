@@ -35,7 +35,6 @@ Data was scraped using tabula, formatted in Excel using VBA, and tidied in Jupyt
 | :---------------------------------------- | :--------------------------------------------------------------------------------- |
 | data                                      | Folder containing original data files and scrubbed output                          |
 | code                                      | Folder containing Jupyter notebooks and VBA exports                                |
-| documentation                             | Folder containing general project documentation                                    | 
 | Data Scrape and Validation Presenatation  | Power Point recap of project and findings                                          |
 
 
